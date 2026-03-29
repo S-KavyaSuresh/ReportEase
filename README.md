@@ -38,6 +38,8 @@ ReportEase solves this by:
 
 > ⚠️ ReportEase is an informational tool, not a diagnostic service. Always consult a qualified doctor.
 
+![Home](assets/screenshots/Home.png)
+
 ---
 
 ## 💡 Why This Matters
@@ -60,6 +62,9 @@ ReportEase bridges this gap by making medical information:
 - AI reads the report using **Groq's vision model** (Llama 4 Scout)
 - Extracts every parameter — name, value, unit, and reference range
 
+![Report Analysis](assets/screenshots/Analyzing.png)
+
+
 ### 📊 Parameter Findings
 Each parameter is shown with:
 - Current value vs normal range
@@ -67,6 +72,9 @@ Each parameter is shown with:
 - Plain-language explanation of what the value means
 - Possible related symptoms
 - Filter by All / Needs Attention / Borderline / Normal
+
+  ![ParametersFindings](assets/screenshots/ParametersFindings.png)
+
 
 ### 🔍 Hidden Concern Detection
 ReportEase does **not** just read the report summary. It scans every individual value and surfaces borderline or mildly abnormal parameters that the report itself may have labelled "normal overall." Nothing is missed.
@@ -79,6 +87,8 @@ After analysis, ReportEase generates a personalised checklist:
 - Step-by-step next actions in plain language
 - Safe home care suggestions for mild findings (foods, hydration, rest)
 
+  ![WhatToDoNext](assets/screenshots/WhatToDoNext.png)
+
 ### 🏥 Nearby Hospitals
 - Helps users take immediate real-world action after understanding reports
 - Enter your city or allow location access
@@ -86,6 +96,9 @@ After analysis, ReportEase generates a personalised checklist:
 - Shows hospital name, address, phone, opening hours
 - Direct **Google Maps link** for directions
 - **Practo appointment booking** link for Indian cities
+
+  ![NearbyHospitals](assets/screenshots/NearbyHospitals.png)
+
 
 ### 🔊 Voice Audio Output
 This is the core of ReportEase. **Every result is read aloud.**
@@ -128,6 +141,8 @@ Full multilingual support across the entire app:
 | **Southeast Asia** | Vietnamese · Thai · Indonesian · Malay · Filipino · Burmese · Khmer |
 | **Europe** | Spanish · French · German · Italian · Portuguese · Russian · Polish · Dutch · Swedish · Norwegian · Danish · Finnish · Czech · Romanian · Hungarian |
 | **Middle East & Africa** | Arabic · Swahili · Hausa · Amharic |
+
+![Languages](assets/screenshots/Languages.png)
 
 - The **entire UI** (buttons, labels, placeholders, messages) is translated into your language
 - Report analysis is generated **directly in your language**
