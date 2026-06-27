@@ -31,6 +31,10 @@ It is designed for people who find medical reports difficult to understand becau
 
 > ⚠️ ReportEase is an informational and educational support tool. It does not provide medical diagnosis or treatment. Always consult a qualified medical professional for medical decisions.
 
+
+### Home Page
+![Home Page](assets/home.png)
+
 ---
 
 ## 💡 Why This Project Matters
@@ -75,6 +79,9 @@ ReportEase supports medical report understanding by extracting and analysing rep
 | Report types    | Blood tests, CBC, thyroid, diabetes, liver, kidney, lipid profile, radiology text reports, and more |
 | Output          | Simple explanation, findings, concern level, and next-step suggestions                              |
 
+### Report Analysis
+![Report Analysis](assets/summary.png)
+
 ---
 
 ## 📊 Parameter Findings
@@ -89,6 +96,11 @@ For extracted medical values, ReportEase can show:
 | Status             | Normal, borderline, or needs attention |
 | Explanation        | Simple meaning of the value            |
 | Possible Relevance | Why the value may matter               |
+
+
+### Parameter Findings
+![Parameter Findings](assets/parameter_findings.png)
+
 
 ---
 
@@ -173,6 +185,9 @@ The chat feature allows users to continue the conversation after the report is a
 | Multilingual Replies    | Responds in the selected language where supported |
 | Session Context         | Maintains report context during the session       |
 
+### AI Follow-Up Chat
+![AI Follow-Up Chat](assets/AI-chat.png)
+
 ---
 
 ## 🌐 Language Support
@@ -187,6 +202,11 @@ ReportEase is designed with multilingual accessibility in mind.
 | Middle Eastern & African Languages | Arabic, Swahili, Hausa and more where supported                               |
 
 The goal is to explain medical information in the user’s preferred language, not only in English.
+
+---
+
+### Demo
+[▶️ Watch Demo Video](assets/Demo-ReportEase.mp4)
 
 ---
 
