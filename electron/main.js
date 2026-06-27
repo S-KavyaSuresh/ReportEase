@@ -8,7 +8,7 @@ function createWindow() {
     minWidth: 800,
     minHeight: 600,
     title: 'ReportEase',
-    icon: path.join(__dirname, 'assets', 'icon.png'),
+    icon: path.join(__dirname, 'assets', 'icon.ico'),
     backgroundColor: '#07080f',
     webPreferences: {
       contextIsolation: true,
@@ -21,8 +21,7 @@ function createWindow() {
 
   Menu.setApplicationMenu(null);
 
-  const indexPath = path.join(__dirname, '..', 'frontend', 'build', 'index.html');
-  win.loadFile(indexPath);
+  win.loadURL('https://report-ease-flame.vercel.app');
   win.once('ready-to-show', () => win.show());
 
   win.webContents.setWindowOpenHandler(({ url }) => {
