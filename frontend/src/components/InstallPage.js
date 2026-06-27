@@ -4,6 +4,26 @@ import { APP_VERSION, DISTRIBUTION_URLS } from '../config/appMeta';
 import { getInstallContext, subscribeToInstallPrompt, triggerWebInstall } from '../utils/install';
 import { getBrandPronunciation } from '../utils/brand';
 
+const WINDOWS_INSTALLER_URL =
+  'https://github.com/S-KavyaSuresh/ReportEase/releases/download/v2.1.0/ReportEase.Setup.2.1.0.exe';
+
+const ANDROID_APK_URL =
+  'https://github.com/S-KavyaSuresh/ReportEase/releases/download/v2.1.0/ReportEase-Android.apk';
+
+const WEB_APP_URL = 'https://report-ease-flame.vercel.app';
+
+function getSafeDistributionUrl(value, fallback) {
+  if (!value || typeof value !== 'string') return fallback;
+  if (value.includes('REPLACE_WITH')) return fallback;
+  return value;
+}
+
+const FINAL_DISTRIBUTION_URLS = {
+  windowsInstaller: getSafeDistributionUrl(DISTRIBUTION_URLS?.windowsInstaller, WINDOWS_INSTALLER_URL),
+  androidApk: getSafeDistributionUrl(DISTRIBUTION_URLS?.androidApk, ANDROID_APK_URL),
+  webApp: getSafeDistributionUrl(DISTRIBUTION_URLS?.webApp, WEB_APP_URL),
+};
+
 const PLATFORM_OPTIONS = [
   { key: 'windows', labelKey: 'pcTab' },
   { key: 'android', labelKey: 'mobileTab' },
@@ -30,21 +50,22 @@ const BASE_COPY = {
   downloadPc: 'Download for PC',
   downloadMobile: 'Download for Mobile',
   installWeb: 'Install Web App',
+  openWeb: 'Open Web App',
   iosHint: 'On iPhone or iPad, open Share and choose Add to Home Screen.',
   windowsSteps: [
     'Click Download for PC',
-    'Open the downloaded file',
+    'Open the downloaded installer file',
     'Follow the setup steps',
     'Open ReportEase from your desktop or Start Menu',
   ],
   androidSteps: [
     'Click Download for Mobile',
     'Open the downloaded APK file',
-    'Tap Install',
-    'Open ReportEase from your app list',
+    'Allow installation if Android asks for permission',
+    'Tap Install and open ReportEase from your app list',
   ],
   webSteps: [
-    'Click Install Web App',
+    'Click Install Web App if the button is available',
     'Confirm installation when your browser asks',
     'Open ReportEase from your home screen or desktop',
   ],
@@ -71,18 +92,19 @@ const LANGUAGE_COPY = {
     downloadPc: 'கணினிக்காக பதிவிறக்கவும்',
     downloadMobile: 'மொபைலுக்காக பதிவிறக்கவும்',
     installWeb: 'Web App நிறுவவும்',
+    openWeb: 'Web App திறக்கவும்',
     iosHint: 'iPhone அல்லது iPad-ல் Share-ஐ திறந்து Add to Home Screen என்பதை தேர்வு செய்யவும்.',
     windowsSteps: [
       'கணினிக்காக பதிவிறக்கவும் என்பதை அழுத்தவும்',
-      'பதிவிறக்கப்பட்ட கோப்பை திறக்கவும்',
+      'பதிவிறக்கப்பட்ட நிறுவல் கோப்பை திறக்கவும்',
       'நிறுவல் படிகளை பின்பற்றவும்',
       'Desktop அல்லது Start Menu-இல் இருந்து ReportEase-ஐ திறக்கவும்',
     ],
     androidSteps: [
       'மொபைலுக்காக பதிவிறக்கவும் என்பதை அழுத்தவும்',
       'பதிவிறக்கப்பட்ட APK கோப்பை திறக்கவும்',
-      'Install என்பதைத் தட்டவும்',
-      'செயலிகளின் பட்டியலில் இருந்து ReportEase-ஐ திறக்கவும்',
+      'Android அனுமதி கேட்டால் அனுமதிக்கவும்',
+      'Install என்பதைத் தட்டி ReportEase-ஐ திறக்கவும்',
     ],
     webSteps: [
       'Web App நிறுவவும் என்பதை அழுத்தவும்',
@@ -106,12 +128,16 @@ function PlatformCard({ title, description, version, action, stateLabel, steps }
         </div>
         <div className="install-version-badge">{version}</div>
       </div>
+
       <div className="install-card-actions">
         {action ? <div>{action}</div> : null}
-        {stateLabel && <span className="install-state-badge">{stateLabel}</span>}
+        {stateLabel ? <span className="install-state-badge">{stateLabel}</span> : null}
       </div>
+
       <ol className="install-steps">
-        {steps.map((step) => <li key={step}>{step}</li>)}
+        {steps.map((step) => (
+          <li key={step}>{step}</li>
+        ))}
       </ol>
     </section>
   );
@@ -121,6 +147,7 @@ export default function InstallPage({ language = 'English' }) {
   const [selectedPlatform, setSelectedPlatform] = useState('windows');
   const [installState, setInstallState] = useState(getInstallContext);
   const [copy, setCopy] = useState(() => getCachedUITranslations(language, getBaseCopy(language)));
+
   const brandPronunciation = getBrandPronunciation(language);
 
   useEffect(() => subscribeToInstallPrompt(setInstallState), []);
@@ -128,79 +155,117 @@ export default function InstallPage({ language = 'English' }) {
   useEffect(() => {
     let active = true;
     const fallbackCopy = getBaseCopy(language);
+
     setCopy(fallbackCopy);
+
     getUITranslations(language, BASE_COPY)
       .then((data) => {
         if (!active) return;
+
         const translations = data.translations || {};
-        setCopy(language === 'Tamil' ? { ...translations, ...fallbackCopy } : { ...fallbackCopy, ...translations });
+
+        if (language === 'Tamil') {
+          setCopy({ ...translations, ...fallbackCopy });
+        } else {
+          setCopy({ ...fallbackCopy, ...translations });
+        }
       })
-      .catch(() => active && setCopy(fallbackCopy));
-    return () => { active = false; };
+      .catch(() => {
+        if (active) setCopy(fallbackCopy);
+      });
+
+    return () => {
+      active = false;
+    };
   }, [language]);
 
   const canInstallWeb = Boolean(installState.installPrompt);
 
-  const platformMeta = useMemo(() => ({
-    windows: {
-      title: copy.windowsTitle,
-      description: copy.windowsDesc,
-      version: `v${APP_VERSION}`,
-      action: DISTRIBUTION_URLS.windowsInstaller
-        ? (
-          <a className="btn-primary install-action-btn" href={DISTRIBUTION_URLS.windowsInstaller} download>
+  const platformMeta = useMemo(
+    () => ({
+      windows: {
+        title: copy.windowsTitle,
+        description: copy.windowsDesc,
+        version: `v${APP_VERSION}`,
+        action: FINAL_DISTRIBUTION_URLS.windowsInstaller ? (
+          <a
+            className="btn-primary install-action-btn"
+            href={FINAL_DISTRIBUTION_URLS.windowsInstaller}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {copy.downloadPc}
           </a>
-        )
-        : (
+        ) : (
           <button className="btn-ghost install-action-btn" disabled>
             {copy.comingSoon}
           </button>
         ),
-      stateLabel: '',
-      steps: copy.windowsSteps,
-    },
-    android: {
-      title: copy.androidTitle,
-      description: copy.androidDesc,
-      version: `v${APP_VERSION}`,
-      action: DISTRIBUTION_URLS.androidApk
-        ? (
-          <a className="btn-primary install-action-btn" href={DISTRIBUTION_URLS.androidApk} download>
+        stateLabel: '',
+        steps: copy.windowsSteps,
+      },
+
+      android: {
+        title: copy.androidTitle,
+        description: copy.androidDesc,
+        version: `v${APP_VERSION}`,
+        action: FINAL_DISTRIBUTION_URLS.androidApk ? (
+          <a
+            className="btn-primary install-action-btn"
+            href={FINAL_DISTRIBUTION_URLS.androidApk}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {copy.downloadMobile}
           </a>
-        )
-        : (
+        ) : (
           <button className="btn-ghost install-action-btn" disabled>
             {copy.comingSoon}
           </button>
         ),
-      stateLabel: '',
-      steps: copy.androidSteps,
-    },
-    web: {
-      title: copy.webTitle,
-      description: installState.isIOS ? `${copy.webDesc} ${copy.iosHint}` : copy.webDesc,
-      version: `v${APP_VERSION}`,
-      action: installState.isInstalled || (!canInstallWeb && !installState.isIOS) ? null : installState.isIOS ? null : canInstallWeb ? (
-        <button
-          className="btn-primary install-action-btn"
-          onClick={async () => {
-            await triggerWebInstall(installState.installPrompt);
-            setInstallState(getInstallContext());
-          }}
-        >
-          {copy.installWeb}
-        </button>
-      ) : (
-        <button className="btn-ghost install-action-btn" disabled>
-          {copy.installUnavailable}
-        </button>
-      ),
-      stateLabel: installState.isInstalled || (!canInstallWeb && !installState.isIOS) ? copy.installed : installState.isIOS ? copy.useShareMenu : '',
-      steps: copy.webSteps,
-    },
-  }), [canInstallWeb, copy, installState]);
+        stateLabel: '',
+        steps: copy.androidSteps,
+      },
+
+      web: {
+        title: copy.webTitle,
+        description: installState.isIOS ? `${copy.webDesc} ${copy.iosHint}` : copy.webDesc,
+        version: `v${APP_VERSION}`,
+        action: installState.isInstalled ? (
+          <a
+            className="btn-primary install-action-btn"
+            href={FINAL_DISTRIBUTION_URLS.webApp}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {copy.openWeb}
+          </a>
+        ) : installState.isIOS ? null : canInstallWeb ? (
+          <button
+            className="btn-primary install-action-btn"
+            onClick={async () => {
+              await triggerWebInstall(installState.installPrompt);
+              setInstallState(getInstallContext());
+            }}
+          >
+            {copy.installWeb}
+          </button>
+        ) : (
+          <a
+            className="btn-primary install-action-btn"
+            href={FINAL_DISTRIBUTION_URLS.webApp}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {copy.openWeb}
+          </a>
+        ),
+        stateLabel: installState.isInstalled ? copy.installed : installState.isIOS ? copy.useShareMenu : '',
+        steps: copy.webSteps,
+      },
+    }),
+    [canInstallWeb, copy, installState]
+  );
 
   const selected = platformMeta[selectedPlatform];
 
@@ -208,7 +273,17 @@ export default function InstallPage({ language = 'English' }) {
     <div className="install-page">
       <section className="install-hero card">
         <div>
-          <img src="/icon-192.png" alt="ReportEase" style={{ width: 56, height: 56, borderRadius: 16, marginBottom: 12 }} />
+          <img
+            src="/icon-192.png"
+            alt="ReportEase"
+            style={{
+              width: 56,
+              height: 56,
+              borderRadius: 16,
+              marginBottom: 12,
+            }}
+          />
+
           <div className="install-eyebrow">
             <span className="brand-lockup">
               <span className="brand-lockup-main">ReportEase</span>
@@ -216,9 +291,11 @@ export default function InstallPage({ language = 'English' }) {
             </span>
             <span className="install-version-inline">v{APP_VERSION}</span>
           </div>
+
           <h1>{copy.title}</h1>
           <p>{copy.description}</p>
         </div>
+
         <div className="install-hero-side">
           <span>{copy.currentVersion}</span>
           <strong>v{APP_VERSION}</strong>
@@ -232,11 +309,13 @@ export default function InstallPage({ language = 'English' }) {
               key={platform.key}
               className={`install-platform-tab${selectedPlatform === platform.key ? ' active' : ''}`}
               onClick={() => setSelectedPlatform(platform.key)}
+              type="button"
             >
               {copy[platform.labelKey] || BASE_COPY[platform.labelKey]}
             </button>
           ))}
         </div>
+
         <PlatformCard {...selected} />
       </section>
     </div>
