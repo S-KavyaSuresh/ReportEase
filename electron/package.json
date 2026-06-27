@@ -1,0 +1,79 @@
+{
+  "name": "reportease-desktop",
+  "version": "2.1.0",
+  "description": "ReportEase \u2014 AI Medical Report Companion (Desktop)",
+  "main": "main.js",
+  "author": "ReportEase",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "NODE_ENV=development electron .",
+    "build": "npm --prefix ../frontend run build && electron-builder",
+    "build:win": "cross-env REACT_APP_API_URL=https://REPLACE_WITH_YOUR_RENDER_URL.onrender.com npm --prefix ../frontend run build && electron-builder --win",
+    "build:mac": "cross-env REACT_APP_API_URL=https://REPLACE_WITH_YOUR_RENDER_URL.onrender.com npm --prefix ../frontend run build && electron-builder --mac",
+    "pack": "electron-builder --dir"
+  },
+  "build": {
+    "appId": "com.reportease.app",
+    "productName": "ReportEase",
+    "copyright": "\u00a9 2024 ReportEase",
+    "directories": {
+      "output": "dist",
+      "buildResources": "assets"
+    },
+    "files": [
+      "main.js",
+      "assets/**",
+      "../frontend/build/**"
+    ],
+    "extraMetadata": {
+      "main": "main.js"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.png",
+      "publisherName": "ReportEase",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "ReportEase",
+      "installerIcon": "assets/icon.png",
+      "uninstallerIcon": "assets/icon.png",
+      "installerHeaderIcon": "assets/icon.png",
+      "deleteAppDataOnUninstall": false
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.png",
+      "category": "public.app-category.healthcare"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png",
+      "category": "Healthcare"
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^30.0.0",
+    "electron-builder": "^24.13.0",
+    "cross-env": "^7.0.3"
+  }
+}

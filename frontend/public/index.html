@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <title>ReportEase</title>
+  <meta name="description" content="Understand your medical reports in simple language with AI-powered analysis, voice guidance, and multilingual support." />
+  <meta name="application-name" content="ReportEase" />
+  <meta name="keywords" content="medical report, AI, health, blood test, analysis, multilingual" />
+
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#07080f" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="ReportEase" />
+
+  <link rel="shortcut icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=2.1.4" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=2.1.4" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=2.1.4" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2.1.4" />
+
+  <meta name="msapplication-TileColor" content="#07080f" />
+  <meta name="msapplication-TileImage" content="/icon-192.png?v=2.1.4" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="ReportEase" />
+  <meta property="og:description" content="Understand your medical reports in simple language." />
+  <meta property="og:image" content="/icon-512.png?v=2.1.4" />
+</head>
+<body>
+  <noscript>You need to enable JavaScript to run ReportEase.</noscript>
+  <div id="root"></div>
+
+  <script>
+    var isLocalDevHost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        if (isLocalDevHost) {
+          navigator.serviceWorker.getRegistrations()
+            .then(function (registrations) {
+              registrations.forEach(function (registration) {
+                registration.unregister();
+              });
+            })
+            .catch(function () {});
+          return;
+        }
+
+        navigator.serviceWorker.register('/sw.js')
+          .then(function (reg) {
+            reg.update();
+            console.log('[SW] registered:', reg.scope);
+          })
+          .catch(function (err) {
+            console.warn('[SW] registration failed:', err);
+          });
+      });
+    }
+
+    window._pwaInstallPrompt = null;
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      window._pwaInstallPrompt = e;
+      window.dispatchEvent(new Event('pwaInstallReady'));
+    });
+    window.addEventListener('appinstalled', function () {
+      window._pwaInstallPrompt = null;
+      window.dispatchEvent(new Event('pwaInstallReady'));
+    });
+  </script>
+</body>
+</html>

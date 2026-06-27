@@ -1,0 +1,2385 @@
+:root {
+  --app-font-scale: 16px;
+  --bg: #171a18;
+  --bg2: rgba(23, 26, 24, 0.82);
+  --surface: rgba(31, 35, 33, 0.84);
+  --surface2: rgba(38, 43, 40, 0.94);
+  --surface3: #2e342f;
+  --text: #f4eee4;
+  --text2: #d4c8b5;
+  --text3: #a49a8a;
+  --border: rgba(255, 243, 220, 0.12);
+  --border2: rgba(255, 243, 220, 0.18);
+  --primary: #3fb39a;
+  --primary2: #56c0a8;
+  --accent: #df7855;
+  --gold: #d5ab51;
+  --green: #6ad293;
+  --yellow: #e0ac46;
+  --red: #e37a7a;
+  --radius: 24px;
+  --radius-sm: 16px;
+  --shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+  --font-head: "Georgia", "Times New Roman", serif;
+  --font-body: "Segoe UI", "Helvetica Neue", sans-serif;
+}
+
+body.light {
+  --bg: #f4efe6;
+  --bg2: rgba(244, 239, 230, 0.84);
+  --surface: rgba(255, 251, 245, 0.86);
+  --surface2: rgba(255, 248, 238, 0.94);
+  --surface3: #eadfcd;
+  --text: #1f1b16;
+  --text2: #564d41;
+  --text3: #7a705f;
+  --border: rgba(79, 60, 38, 0.12);
+  --border2: rgba(79, 60, 38, 0.2);
+  --primary: #146c63;
+  --primary2: #1f8a70;
+  --accent: #d55d3f;
+  --gold: #d2a23c;
+  --green: #1c8c5e;
+  --yellow: #b97b12;
+  --red: #c44242;
+  --shadow: 0 24px 80px rgba(75, 57, 36, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: var(--app-font-scale);
+}
+
+html, body, #root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background:
+    radial-gradient(circle at top left, rgba(31, 138, 112, 0.16), transparent 28%),
+    radial-gradient(circle at top right, rgba(210, 162, 60, 0.16), transparent 24%),
+    linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 88%, #0e120f 12%) 52%, color-mix(in srgb, var(--bg) 92%, #101411 8%) 100%);
+  color: var(--text);
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+/* Fix select/option visibility in dark mode */
+select {
+  background-color: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border2);
+}
+
+select option {
+  background-color: var(--surface3);
+  color: var(--text);
+}
+
+a {
+  color: inherit;
+}
+
+.ambient-bg::before,
+.ambient-bg::after {
+  content: "";
+  position: fixed;
+  inset: auto;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(18px);
+}
+
+.ambient-bg::before {
+  width: 28rem;
+  height: 28rem;
+  top: 5rem;
+  left: -7rem;
+  background: rgba(31, 138, 112, 0.12);
+  border-radius: 999px;
+}
+
+.ambient-bg::after {
+  width: 24rem;
+  height: 24rem;
+  top: 12rem;
+  right: -6rem;
+  background: rgba(213, 93, 63, 0.1);
+  border-radius: 999px;
+}
+
+.page-shell {
+  position: relative;
+  z-index: 1;
+  width: min(1220px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 24px 0 64px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+}
+
+.btn-primary,
+.btn-ghost,
+.tab-chip,
+.file-remove,
+.quick-action {
+  border: 0;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.btn-primary:hover,
+.btn-ghost:hover,
+.tab-chip:hover,
+.quick-action:hover {
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary2) 100%);
+  color: #fff9f2;
+  padding: 12px 22px;
+  border-radius: 999px;
+  box-shadow: 0 14px 30px rgba(20, 108, 99, 0.24);
+  min-width: 80px;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* btn-ghost: use CSS vars so it works in both dark and light mode */
+.btn-ghost {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border2);
+  padding: 10px 16px;
+  border-radius: 999px;
+}
+
+.btn-ghost:hover {
+  background: var(--surface3);
+}
+
+.install-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 800;
+  width: fit-content;
+  min-width: min(320px, calc(100vw - 24px));
+  max-width: calc(100vw - 24px);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  padding: 12px 14px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  justify-items: stretch;
+  overflow: hidden;
+  height: auto;
+}
+
+.install-banner-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.install-banner-copy {
+  min-width: 0;
+  text-align: left;
+}
+
+.brand-lockup {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.1;
+}
+
+.brand-lockup-main {
+  display: block;
+}
+
+.install-banner .brand-lockup-main {
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.brand-lockup-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.58em;
+  line-height: 1.1;
+  color: var(--text3);
+  font-weight: 500;
+}
+
+.install-banner-title {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.3;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.install-banner-body {
+  margin-top: 2px;
+  font-size: 0.76rem;
+  color: var(--text3);
+  line-height: 1.45;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.install-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.install-banner-btn {
+  min-height: auto;
+  min-width: 0;
+  padding: 8px 14px;
+  font-size: 13px;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.install-banner-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text3);
+  font-size: 20px;
+  line-height: 1;
+  padding: 2px 4px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .install-banner {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .install-banner-actions {
+    grid-column: 1 / -1;
+    justify-content: center;
+    padding-left: 0;
+  }
+
+  .install-banner-btn {
+    flex: 1 1 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .install-banner {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .install-banner-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .install-banner-actions {
+    grid-column: auto;
+    padding-left: 0;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .install-banner-btn {
+    width: 100%;
+    flex: 1 1 auto;
+  }
+}
+
+/* input-base: use CSS vars */
+.input-base {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  border-radius: 16px;
+  padding: 12px 14px;
+  outline: none;
+}
+
+.input-base::placeholder {
+  color: var(--text3);
+}
+
+.input-base:focus {
+  border-color: rgba(31, 138, 112, 0.5);
+  box-shadow: 0 0 0 4px rgba(31, 138, 112, 0.12);
+}
+
+.hero-shell,
+.results-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.95fr;
+  gap: 22px;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.hero-copy,
+.upload-panel,
+.results-hero,
+.care-grid,
+.results-grid,
+.findings-layout,
+.conversation-grid {
+  min-width: 0;
+}
+
+.hero-copy {
+  padding: 38px 8px 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.hero-eyebrow,
+.results-eyebrow,
+.section-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text3);
+}
+
+.hero-title,
+.results-title {
+  font-family: var(--font-head);
+  font-size: clamp(1.8rem, 4vw, 4.8rem);
+  line-height: 1.1;
+  margin: 14px 0 18px;
+  letter-spacing: -0.02em;
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: none;
+}
+
+.hero-text,
+.results-subtitle,
+.summary-text,
+.plain-note {
+  color: var(--text2);
+  line-height: 1.7;
+}
+
+.feature-pill-grid,
+.hero-stats,
+.tag-list,
+.quick-actions,
+.signal-grid,
+.summary-grid,
+.mini-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* feature pills: use CSS vars */
+.feature-pill,
+.severity-tag,
+.alert-tag,
+.mini-pill,
+.signal-pill {
+  padding: 9px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  color: var(--text);
+  font-size: 13px;
+}
+
+.hero-stat-card,
+.metric-card,
+.callout-card,
+.signal-card,
+.summary-card,
+.care-card,
+.finding-card {
+  border-radius: 20px;
+}
+
+/* stat cards: use CSS vars */
+.hero-stat-card,
+.metric-card {
+  min-width: 180px;
+  padding: 16px 18px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  overflow: hidden;
+}
+
+.hero-stat-card strong,
+.metric-card strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+  overflow-wrap: normal;
+  word-break: normal;
+  white-space: normal;
+  line-height: 1.3;
+  hyphens: none;
+}
+
+.upload-panel {
+  padding: 24px;
+}
+
+.upload-panel-top,
+.results-hero,
+.header-inner,
+.doctor-callout,
+.finding-head,
+.pattern-row,
+.question-row,
+.term-row,
+.hospital-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.check-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 12px;
+  direction: ltr;
+  text-align: left;
+}
+
+.results-hero {
+  padding: 28px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.results-hero-main {
+  flex: 1;
+  min-width: 220px;
+}
+
+.results-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  gap: 12px;
+  width: clamp(560px, 52%, 720px);
+  flex-shrink: 0;
+}
+
+.dropzone {
+  margin-top: 18px;
+  border: 2px dashed rgba(31, 138, 112, 0.3);
+  background: linear-gradient(180deg, rgba(31, 138, 112, 0.06), rgba(31, 138, 112, 0.02));
+  border-radius: 22px;
+  padding: 34px 18px;
+  text-align: center;
+}
+
+.dropzone-active {
+  border-color: var(--primary2);
+  background: rgba(31, 138, 112, 0.1);
+}
+
+.dropzone-icon {
+  width: 62px;
+  height: 62px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 2rem;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--gold));
+}
+
+.file-stack,
+.stack-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+/* file-row and siblings: use CSS vars */
+.file-row,
+.pattern-row,
+.question-row,
+.term-row,
+.check-row,
+.signal-card {
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  color: var(--text);
+}
+
+.file-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.file-row-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(20, 108, 99, 0.12);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.file-row-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.file-row-name {
+  font-weight: 600;
+}
+
+.file-row-size,
+.upload-footnote,
+.panel-subtitle,
+.doctor-callout p,
+.section-title,
+.file-remove {
+  color: var(--text3);
+}
+
+.error-banner {
+  margin-top: 14px;
+  background: rgba(196, 66, 66, 0.1);
+  border: 1px solid rgba(196, 66, 66, 0.2);
+  color: var(--red);
+  border-radius: 16px;
+  padding: 12px 14px;
+}
+
+.form-grid,
+.summary-grid,
+.care-grid,
+.results-grid,
+.conversation-grid,
+.findings-layout {
+  display: grid;
+  gap: 18px;
+}
+
+.form-grid {
+  grid-template-columns: 1fr 1fr;
+  margin-top: 18px;
+}
+
+.callout-card {
+  background: linear-gradient(135deg, rgba(210, 162, 60, 0.15), rgba(213, 93, 63, 0.08));
+  border: 1px solid rgba(210, 162, 60, 0.22);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.launch-button {
+  width: 100%;
+  margin-top: 18px;
+  padding: 16px 24px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.upload-footnote {
+  margin-top: 14px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.status-good {
+  border-color: rgba(28, 140, 94, 0.16);
+}
+
+.status-warn {
+  border-color: rgba(185, 123, 18, 0.22);
+}
+
+.status-critical {
+  border-color: rgba(196, 66, 66, 0.22);
+}
+
+.summary-grid {
+  grid-template-columns: 1.15fr 0.85fr;
+}
+
+.results-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.findings-layout,
+.care-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Conversation tab: voice summary is fixed width; chat panel fills the rest */
+.conversation-grid {
+  grid-template-columns: 320px 1fr;
+}
+
+.summary-card,
+.care-card,
+.voice-summary-card,
+.findings-column {
+  padding: 22px;
+}
+
+/* Voice summary card: fixed width, don't grow */
+.voice-summary-card {
+  flex-shrink: 0;
+  align-self: start;   /* don't stretch to chat panel height */
+  position: sticky;
+  top: 16px;
+}
+
+.section-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 14px;
+  font-weight: 700;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 12px;
+  color: var(--text2);
+}
+
+.section-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  bottom: 0.15em;
+  width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--accent), var(--gold));
+}
+
+.question-row-action {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.question-row-action:hover {
+  border-color: rgba(213, 93, 63, 0.32);
+  background: rgba(213, 93, 63, 0.08);
+}
+
+.severity-normal {
+  background: rgba(28, 140, 94, 0.1);
+}
+
+.severity-mild {
+  background: rgba(185, 123, 18, 0.12);
+}
+
+.severity-moderate,
+.severity-needs_attention {
+  background: rgba(196, 66, 66, 0.12);
+}
+
+.emergency-card {
+  padding: 20px 24px;
+  border: 1px solid rgba(196, 66, 66, 0.24);
+  background: linear-gradient(135deg, rgba(196, 66, 66, 0.08), rgba(213, 93, 63, 0.08));
+}
+
+.tab-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* tab-chip: use CSS vars */
+.tab-chip {
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border2);
+}
+
+.tab-chip-active {
+  background: linear-gradient(135deg, var(--accent), var(--gold));
+  color: #fffaf2;
+  border-color: transparent;
+}
+
+/* voice player: use CSS vars */
+.voice-player {
+  margin-top: 14px;
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+}
+
+.vp-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.vp-controls {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* vp buttons */
+.vp-btn {
+  border-radius: 10px;
+  border: 1px solid var(--border2);
+  background: var(--surface3);
+  color: var(--text);
+  padding: 7px 12px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.vp-btn:hover:not(:disabled) {
+  background: var(--surface2);
+  border-color: var(--primary2);
+}
+
+.vp-btn:disabled {
+  opacity: 0.38;
+  cursor: default;
+}
+
+.vp-btn.play {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary2) 100%);
+  color: #fff;
+  border-color: transparent;
+}
+
+.vp-btn.play:hover {
+  opacity: 0.88;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary2) 100%);
+}
+
+.vp-btn.nav-toggle.active {
+  background: var(--primary2);
+  color: #fff;
+  border-color: transparent;
+}
+
+.vp-progress {
+  display: grid;
+  gap: 5px;
+}
+
+.vp-bar {
+  height: 7px;
+  background: rgba(20, 108, 99, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border2);
+}
+
+.vp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary2), var(--accent));
+  border-radius: 999px;
+  transition: width 0.35s ease;
+}
+
+.vp-info {
+  font-size: 11px;
+  color: var(--text3);
+  text-align: right;
+}
+
+/* Speed chips */
+.vp-speed-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.vp-speed-label {
+  font-size: 11px;
+  color: var(--text3);
+  white-space: nowrap;
+}
+
+.vp-speed-chips {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.vp-speed-chip {
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border2);
+  background: var(--surface3);
+  color: var(--text2);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.13s;
+}
+
+.vp-speed-chip:hover {
+  border-color: var(--primary2);
+  color: var(--text);
+}
+
+.vp-speed-chip.active {
+  background: var(--primary2);
+  color: #fff;
+  border-color: transparent;
+}
+
+/* Sentence navigation panel */
+.vp-nav-panel {
+  display: grid;
+  gap: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 8px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.vp-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text2);
+  font-size: 0.78rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.13s;
+}
+
+.vp-nav-item:hover {
+  background: var(--surface2);
+  color: var(--text);
+}
+
+.vp-nav-item.current {
+  background: rgba(20, 108, 99, 0.12);
+  color: var(--primary2);
+}
+
+.vp-nav-num {
+  font-weight: 700;
+  font-size: 0.72rem;
+  min-width: 18px;
+  text-align: center;
+  color: var(--text3);
+  flex-shrink: 0;
+}
+
+.vp-nav-item.current .vp-nav-num {
+  color: var(--primary2);
+}
+
+.vp-nav-preview {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vp-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text2);
+}
+
+.vp-speaking-label {
+  color: var(--primary2);
+}
+
+.hospital-meta,
+.input-label {
+  font-size: 12px;
+  color: var(--text3);
+}
+
+/* finding cards: use CSS vars */
+.finding-card {
+  padding: 16px;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  color: var(--text);
+}
+
+.finding-card.status-normal {
+  border-left: 5px solid var(--green);
+}
+
+.finding-card.status-warning {
+  border-left: 5px solid var(--yellow);
+}
+
+.finding-card.status-critical {
+  border-left: 5px solid var(--red);
+}
+
+.finding-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.badge {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+
+.badge-normal {
+  color: var(--green);
+}
+
+.badge-warning {
+  color: var(--yellow);
+}
+
+.badge-critical {
+  color: var(--red);
+}
+
+.hospital-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* hospital card: use CSS vars */
+.hospital-card {
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  color: var(--text);
+}
+
+.soft-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 16px 0;
+}
+
+.typing-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--primary2);
+  animation: blink 1s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(2) { animation-delay: 0.12s; }
+.typing-dot:nth-child(3) { animation-delay: 0.24s; }
+
+/* shimmer: use CSS vars so it works in dark and light */
+.shimmer {
+  background: linear-gradient(90deg, var(--surface) 25%, var(--surface3) 50%, var(--surface) 75%);
+  background-size: 220% 100%;
+  animation: shimmer 1.8s linear infinite;
+}
+
+.animate-fadeUp {
+  animation: fadeUp 0.45s ease;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.35s ease;
+}
+
+.animate-pop {
+  animation: popIn 0.35s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -20% 0; }
+}
+
+@keyframes blink {
+  0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-2px); }
+}
+
+@media (max-width: 980px) {
+  .hero-grid,
+  .results-grid,
+  .summary-grid,
+  .care-grid,
+  .conversation-grid,
+  .findings-layout {
+    grid-template-columns: 1fr;
+  }
+
+  /* On mobile voice-summary-card is no longer sticky/fixed */
+  .voice-summary-card {
+    position: static;
+  }
+
+  .results-hero {
+    flex-direction: column;
+  }
+
+  .results-kpis {
+    min-width: 0;
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(120px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    width: min(100% - 20px, 1220px);
+  }
+
+  .hero-title,
+  .results-title {
+    font-size: 2.2rem;
+    word-break: normal;
+    hyphens: none;
+  }
+
+  .form-grid,
+  .results-kpis {
+    grid-template-columns: 1fr;
+  }
+
+  .upload-panel,
+  .summary-card,
+  .care-card,
+  .voice-summary-card,
+  .findings-column,
+  .results-hero {
+    padding: 18px;
+  }
+}
+
+/* ── Multi-report tabs ─────────────────────────────────────────────── */
+.multi-report-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding: 0 4px;
+}
+
+.multi-report-tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text2);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  max-width: 240px;
+}
+
+.multi-report-tab:hover {
+  background: var(--surface3);
+  color: var(--text);
+}
+
+.multi-report-tab.active {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary2) 100%);
+  color: #fff;
+  border-color: transparent;
+}
+
+.multi-report-tab-icon {
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.multi-report-tab-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Remove button — rounded, styled ──────────────────────────────── */
+.file-remove {
+  padding: 5px 13px !important;
+  border-radius: 8px !important;
+  background: rgba(196, 66, 66, 0.1) !important;
+  border: 1px solid rgba(196, 66, 66, 0.2) !important;
+  color: var(--red) !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.file-remove:hover {
+  background: rgba(196, 66, 66, 0.22) !important;
+  border-color: rgba(196, 66, 66, 0.4) !important;
+}
+
+/* ── Feature pill grid — horizontal gap ───────────────────────────── */
+.feature-pill-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin: 18px 0;
+}
+
+.feature-pill {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  color: var(--text2);
+  font-size: 0.82rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ── Smaller font for Tamil, Malayalam (long scripts) ─────────────── */
+:lang(ta) .summary-text,
+:lang(ml) .summary-text,
+[lang="ta"] .summary-text,
+[lang="ml"] .summary-text {
+  font-size: 0.88rem;
+  line-height: 1.75;
+}
+
+/* Target language-specific text by data attribute on body */
+body[data-lang="Tamil"] .summary-text,
+body[data-lang="Tamil"] .finding-layman,
+body[data-lang="Tamil"] .finding-tip,
+body[data-lang="Tamil"] p {
+  font-size: 0.88rem;
+  line-height: 1.8;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+body[data-lang="Malayalam"] .summary-text,
+body[data-lang="Malayalam"] .finding-layman,
+body[data-lang="Malayalam"] .finding-tip,
+body[data-lang="Malayalam"] p {
+  font-size: 0.87rem;
+  line-height: 1.8;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+/* ── Hero stats spacing ─────────────────────────────────────────────── */
+.hero-stats {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+/* ── Dark/Light labels ─────────────────────────────────────────────── */
+.theme-label {
+  font-size: 0.78rem;
+  opacity: 0.7;
+}
+
+/* ── Indian language script fixes — all scripts ───────────────────── */
+/* Remove aggressive word-break for all Indian languages */
+body[data-lang="Tamil"] *,
+body[data-lang="Malayalam"] *,
+body[data-lang="Telugu"] *,
+body[data-lang="Kannada"] *,
+body[data-lang="Bengali"] *,
+body[data-lang="Gujarati"] *,
+body[data-lang="Punjabi"] *,
+body[data-lang="Marathi"] *,
+body[data-lang="Hindi"] *,
+body[data-lang="Urdu"] * {
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Smaller text for longer scripts */
+body[data-lang="Tamil"] .summary-text,
+body[data-lang="Tamil"] .plain-note,
+body[data-lang="Tamil"] .finding-card,
+body[data-lang="Tamil"] p,
+body[data-lang="Malayalam"] .summary-text,
+body[data-lang="Malayalam"] .plain-note,
+body[data-lang="Malayalam"] .finding-card,
+body[data-lang="Malayalam"] p {
+  font-size: 0.88rem;
+  line-height: 1.85;
+}
+
+body[data-lang="Telugu"] .summary-text,
+body[data-lang="Telugu"] .plain-note,
+body[data-lang="Kannada"] .summary-text,
+body[data-lang="Kannada"] .plain-note {
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+/* No word-break on hero title ever — use overflow-wrap instead */
+.hero-title,
+.results-title {
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+/* ── Stat cards — proper horizontal separator lines ───────────────── */
+.hero-stats {
+  gap: 12px;
+  align-items: stretch;
+}
+
+.hero-stat-card {
+  position: relative;
+  flex: 1;
+  min-width: 100px;
+}
+
+/* Divider lines between stat cards */
+.hero-stat-card + .hero-stat-card::before {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: var(--border2);
+}
+
+/* ── Upload area feature pills — two-column on small screens ──────── */
+@media (max-width: 480px) {
+  .feature-pill-grid {
+    gap: 8px 10px;
+  }
+  .feature-pill {
+    font-size: 0.78rem;
+    padding: 5px 11px;
+  }
+}
+
+/* ── Multi-report tabs — mobile ───────────────────────────────────── */
+@media (max-width: 600px) {
+  .multi-report-tabs {
+    gap: 8px;
+  }
+  .multi-report-tab {
+    font-size: 0.78rem;
+    padding: 7px 12px;
+    max-width: 180px;
+  }
+}
+
+/* ── Confidence score badge ───────────────────────────────────────── */
+.confidence-badge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+}
+
+.confidence-label {
+  font-weight: 600;
+  color: var(--text2);
+  white-space: nowrap;
+}
+
+.confidence-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 160px;
+}
+
+.confidence-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--surface3);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border2);
+}
+
+.confidence-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.confidence-score {
+  font-weight: 700;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.confidence-note {
+  color: var(--text3);
+  font-size: 0.76rem;
+  width: 100%;
+}
+
+/* ── Urgency hint in patterns ─────────────────────────────────────── */
+.urgency-hint {
+  font-size: 0.72rem;
+  color: var(--text3);
+  text-align: right;
+  max-width: 160px;
+  line-height: 1.4;
+}
+
+/* ── Metric card tooltip ──────────────────────────────────────────── */
+.metric-card {
+  position: relative;
+  cursor: default;
+}
+
+.metric-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 7px 11px;
+  font-size: 0.75rem;
+  color: var(--text2);
+  white-space: nowrap;
+  z-index: 100;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  pointer-events: none;
+  max-width: 220px;
+  white-space: normal;
+  text-align: center;
+}
+
+.metric-card:hover .metric-tooltip {
+  display: block;
+}
+
+/* ── Fix mobile kpis ─────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .results-kpis {
+    width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .results-hero {
+    flex-direction: column;
+  }
+}
+
+/* ── Buttons: allow wrapping for long translated text ─────────────── */
+button, .btn-primary, .btn-ghost, .vp-btn {
+  word-break: normal;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+/* Tab chips wrap gracefully for long language strings */
+.tab-chip {
+  word-break: normal;
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* ── Metric card — prevent overflow ──────────────────────────────── */
+.metric-card {
+  overflow: hidden;
+}
+
+.metric-card strong {
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+  display: block;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+/* ── Check row (next steps) — always left aligned, never space-between ── */
+.check-row {
+  justify-content: flex-start !important;
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+.check-row p,
+.check-row div,
+.check-row span:last-child {
+  text-align: left !important;
+  direction: ltr !important;
+  flex: 1;
+}
+
+.stack-list {
+  direction: ltr;
+  text-align: left;
+}
+
+/* ── Finding card head — prevent value overflow ──────────────────── */
+.finding-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+/* ── Confidence badge — prevent overflow ─────────────────────────── */
+.confidence-note {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+/* ── Metric card label wrapping ─────────────────────────────────── */
+.metric-card span:first-child {
+  display: block;
+  overflow-wrap: normal;
+  word-break: normal;
+  white-space: normal;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: var(--text3);
+}
+
+/* ── Btn-primary: allow wrapping for long translated labels ──────── */
+.btn-primary {
+  white-space: normal;
+  text-align: center;
+  line-height: 1.3;
+  min-height: 44px;
+}
+
+/* ── Badge overflow fix ──────────────────────────────────────────── */
+.badge {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+  line-height: 1.2;
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* ── Section titles: allow wrapping ─────────────────────────────── */
+.section-title {
+  overflow-wrap: break-word;
+  word-break: normal;
+  white-space: normal;
+}
+
+/* ── Hospital meta / helper text ────────────────────────────────── */
+.hospital-meta {
+  overflow-wrap: anywhere;
+  word-break: normal;
+  white-space: normal;
+}
+
+/* ── Results kpis: use auto columns so labels don't overflow ─────── */
+@media (max-width: 900px) {
+  .results-kpis {
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    width: 100%;
+  }
+}
+
+/* ── Chat panel typing indicator ────────────────────────────────── */
+.typing-dots {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text3);
+  animation: typingBounce 1.2s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+  0%, 80%, 100% { transform: scale(0.7); opacity: 0.5; }
+  40%            { transform: scale(1.0); opacity: 1;   }
+}
+
+/* ── Chat fullscreen overlay backdrop ──────────────────────────── */
+.chat-fullscreen-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+  backdrop-filter: blur(2px);
+}
+
+/* ── Quick action suggestion chips ─────────────────────────────── */
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.quick-action {
+  font-size: 0.8rem;
+  padding: 6px 12px;
+  border-radius: 20px;
+  white-space: normal;
+  text-align: left;
+  line-height: 1.3;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+/* ── Voice summary card fixed sidebar ──────────────────────────── */
+@media (min-width: 900px) {
+  .voice-summary-card {
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   FINAL POLISH — Mobile Responsiveness, Overflow, Loading States
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Prevent horizontal scroll on all screens ──────────────────────
+   This is the single most important mobile fix. */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+#root {
+  overflow-x: hidden;
+}
+
+/* ── header-inner: never overflow on small phones ──────────────── */
+.header-inner {
+  flex-wrap: nowrap;
+  gap: 10px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.header-inner > :last-child {
+  flex-shrink: 0;
+}
+
+/* ── TopBar install + theme buttons: shrink on tiny screens ─────── */
+@media (max-width: 420px) {
+  .header-inner {
+    gap: 6px;
+  }
+  .btn-ghost {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+}
+
+/* ── hero-grid: stack at 768px not 980px ────────────────────────── */
+@media (max-width: 768px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-copy {
+    padding: 16px 0 0;
+  }
+}
+
+/* ── hero stats: horizontal scroll if too many ──────────────────── */
+.hero-stats {
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.hero-stats::-webkit-scrollbar { display: none; }
+
+/* On larger screens, wrap normally */
+@media (min-width: 640px) {
+  .hero-stats {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+}
+
+.hero-stat-card {
+  flex-shrink: 0;
+  min-width: 130px;
+  max-width: 200px;
+}
+
+/* ── results-hero: fix KPI grid on very small phones ────────────── */
+@media (max-width: 480px) {
+  .results-kpis {
+    grid-template-columns: repeat(3, minmax(112px, 1fr));
+    gap: 8px;
+  }
+  .metric-card {
+    padding: 12px 10px;
+    min-width: 0;
+  }
+  .metric-card strong {
+    font-size: 0.82rem;
+  }
+}
+
+/* ── Tab strip: horizontal scroll on mobile ─────────────────────── */
+.tab-strip {
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+  gap: 8px;
+}
+.tab-strip::-webkit-scrollbar { display: none; }
+
+@media (min-width: 600px) {
+  .tab-strip {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+}
+
+.tab-chip {
+  flex-shrink: 0;
+}
+
+/* ── Dropzone: comfortable tap target on phones ──────────────────── */
+@media (max-width: 480px) {
+  .dropzone {
+    padding: 22px 12px;
+  }
+  .dropzone-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.6rem;
+  }
+}
+
+/* ── File row: prevent meta text overflow ───────────────────────── */
+.file-row-meta {
+  min-width: 0;
+  overflow: hidden;
+}
+.file-row-meta > * {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+
+/* ── Language select: full-width on phones ──────────────────────── */
+@media (max-width: 480px) {
+  .language-select-wrapper {
+    width: 100%;
+  }
+  .language-select-wrapper select {
+    width: 100%;
+  }
+}
+
+/* ── Results hero summary: don't clip long text ─────────────────── */
+.results-hero-main {
+  overflow: hidden;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.results-eyebrow {
+  overflow-wrap: break-word;
+  word-break: normal;
+  white-space: normal;
+}
+
+/* ── Pattern rows: stack on phones ─────────────────────────────── */
+@media (max-width: 500px) {
+  .pattern-row {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .pattern-row > div:last-child {
+    align-items: flex-start !important;
+  }
+}
+
+/* ── Doctor callout: stack on phones ───────────────────────────── */
+@media (max-width: 500px) {
+  .doctor-callout {
+    flex-direction: column !important;
+    gap: 8px;
+  }
+}
+
+/* ── Care grid: single column always on phones ──────────────────── */
+@media (max-width: 640px) {
+  .care-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Conversation grid: always single column on phones ──────────── */
+@media (max-width: 900px) {
+  .conversation-grid {
+    grid-template-columns: 1fr;
+  }
+  .voice-summary-card {
+    position: static;
+    max-height: none;
+    overflow-y: visible;
+  }
+}
+
+/* ── Chat panel: full height on phones without overflow ─────────── */
+@media (max-width: 640px) {
+  .chat-input-row {
+    gap: 6px;
+  }
+  .chat-input-row textarea {
+    font-size: 0.85rem;
+  }
+}
+
+/* ── Hospital list: prevent address overflow ────────────────────── */
+.hospital-card {
+  overflow: hidden;
+  word-break: break-word;
+}
+.hospital-card .mini-stats {
+  flex-wrap: wrap;
+}
+.hospital-card .signal-pill {
+  flex-shrink: 0;
+  word-break: break-word;
+  white-space: normal;
+}
+
+/* ── VoicePlayer: compact on phones ────────────────────────────── */
+@media (max-width: 480px) {
+  .voice-player {
+    padding: 12px;
+    gap: 8px;
+  }
+  .vp-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+}
+
+/* ── Install prompt banner: safe on tiny phones ─────────────────── */
+.install-banner {
+  max-width: calc(100vw - 24px);
+  bottom: 16px;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+}
+
+/* ── Loading spinner overlay ────────────────────────────────────── */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: grid;
+  place-items: center;
+  z-index: 500;
+  backdrop-filter: blur(4px);
+}
+
+/* ── Error banner: full-width + wrap ───────────────────────────── */
+.error-banner {
+  width: 100%;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+}
+
+/* ── Summary text: safe wrap on all screens ─────────────────────── */
+.summary-text, .plain-note {
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: auto;
+}
+
+/* ── Finding card: prevent value overflow ───────────────────────── */
+.finding-value {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+  text-align: right;
+}
+
+/* ── Overall: no element wider than viewport ────────────────────── */
+img, video, iframe, table {
+  max-width: 100%;
+}
+
+body[data-lang="Tamil"] .hero-title,
+body[data-lang="Tamil"] .results-title,
+body[data-lang="Tamil"] .summary-text,
+body[data-lang="Tamil"] .plain-note,
+body[data-lang="Tamil"] .metric-card strong,
+body[data-lang="Tamil"] .metric-card span:first-child,
+body[data-lang="Tamil"] .install-banner-body,
+body[data-lang="Tamil"] .dropzone-title,
+body[data-lang="Tamil"] .dropzone-meta,
+body[data-lang="Malayalam"] .hero-title,
+body[data-lang="Malayalam"] .results-title,
+body[data-lang="Malayalam"] .summary-text,
+body[data-lang="Malayalam"] .plain-note,
+body[data-lang="Malayalam"] .metric-card strong,
+body[data-lang="Malayalam"] .metric-card span:first-child,
+body[data-lang="Malayalam"] .install-banner-body,
+body[data-lang="Malayalam"] .dropzone-title,
+body[data-lang="Malayalam"] .dropzone-meta {
+  font-size: 0.96em;
+}
+
+body[data-lang="Tamil"] .hero-title,
+body[data-lang="Malayalam"] .hero-title {
+  line-height: 1.16;
+}
+
+/* ── Safe area for notched phones ───────────────────────────────── */
+.page-shell {
+  padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+  padding-left: max(0px, env(safe-area-inset-left));
+  padding-right: max(0px, env(safe-area-inset-right));
+}
+
+.install-page {
+  display: grid;
+  gap: 18px;
+}
+
+.install-hero,
+.install-platforms,
+.install-note-card {
+  padding: 22px;
+}
+
+.install-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.install-hero h1,
+.install-card h2,
+.install-note-card h2 {
+  margin: 0 0 8px;
+}
+
+.install-hero p,
+.install-card p,
+.install-note-card p {
+  margin: 0;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+.install-eyebrow {
+  margin-bottom: 8px;
+  color: var(--accent);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+  text-align: left;
+}
+
+.install-hero-side,
+.install-version-badge,
+.install-state-badge {
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  border-radius: 14px;
+}
+
+.install-hero-side {
+  min-width: 128px;
+  padding: 14px 16px;
+  display: grid;
+  gap: 4px;
+  text-align: right;
+}
+
+.install-platform-tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 14px 0 18px;
+}
+
+.install-platform-tab {
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text2);
+  border-radius: 999px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.install-platform-tab.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary2));
+  color: #fff;
+  border-color: transparent;
+}
+
+.install-card {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 18px;
+  padding: 20px;
+  display: grid;
+  gap: 16px;
+}
+
+.install-card-header,
+.install-card-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+
+.install-version-badge,
+.install-state-badge {
+  padding: 8px 12px;
+  white-space: nowrap;
+}
+
+.install-state-badge {
+  color: var(--accent);
+}
+
+.install-action-btn {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.install-steps,
+.install-note-list {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text2);
+  line-height: 1.8;
+}
+
+.install-notes-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.topbar-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.topbar-nav-btn {
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text2);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.topbar-nav-btn.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary2));
+  color: #fff;
+  border-color: transparent;
+}
+
+.topbar-nav-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.chat-audio-bar {
+  display: grid;
+  gap: 3px;
+  width: 160px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.chat-audio-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 10px;
+  color: var(--text3);
+}
+
+.chat-audio-bar input[type="range"] {
+  width: 100%;
+  height: 10px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.conversation-grid {
+  grid-template-columns: 1fr !important;
+  align-items: stretch;
+}
+
+.conversation-grid .card {
+  width: 100%;
+  max-width: none;
+}
+
+.vp-progress {
+  gap: 4px;
+}
+
+.vp-bar {
+  height: 4px !important;
+}
+
+.vp-info {
+  font-size: 11px;
+}
+
+@media (max-width: 720px) {
+  .install-hero,
+  .install-card-header,
+  .install-card-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .install-hero-side {
+    text-align: left;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .install-notes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar-nav {
+    order: 3;
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .chat-audio-bar {
+    width: 140px;
+  }
+}
+
+.install-version-inline {
+  margin-left: 0;
+  color: var(--text3);
+  font-size: 0.88em;
+  white-space: nowrap;
+}
+
+.header-brand-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  min-width: 0;
+  line-height: 1.1;
+  white-space: normal;
+}
+
+.header-brand-name {
+  font-size: 22px;
+  font-weight: 700;
+  font-family: var(--font-head);
+  color: var(--text);
+}
+
+.header-brand-pronunciation {
+  font-size: 12px;
+  color: var(--text3);
+  font-weight: 600;
+}
+
+.header-brand-subtitle {
+  display: block;
+  font-size: 12px;
+  color: var(--text3);
+  white-space: normal;
+}
+
+body.lang-ta .install-banner-copy,
+body.lang-ml .install-banner-copy,
+body[data-lang="Hindi"] .install-banner-copy {
+  text-align: left;
+}
+
+body.lang-ta .page-shell,
+body.lang-ml .page-shell,
+body.lang-ta header,
+body.lang-ml header,
+body.lang-ta .install-banner,
+body.lang-ml .install-banner {
+  font-size: 0.96rem;
+}
+
+body.lang-ta :where(
+  .hero-title,
+  .results-title,
+  .hero-text,
+  .results-subtitle,
+  .summary-text,
+  .plain-note,
+  .section-title,
+  .hero-eyebrow,
+  .results-eyebrow,
+  .metric-card,
+  .metric-card strong,
+  .metric-card span,
+  .signal-card,
+  .signal-card strong,
+  .signal-card div,
+  .install-banner-title,
+  .install-banner-body,
+  .header-brand-line,
+  .header-brand-subtitle,
+  .tab-chip,
+  .btn-primary,
+  .btn-ghost,
+  .quick-action,
+  .question-row,
+  .pattern-row,
+  .term-row,
+  .doctor-callout,
+  .hospital-card,
+  .hospital-meta,
+  .dropzone-title,
+  .dropzone-meta,
+  .panel-title,
+  .panel-subtitle,
+  .vp-label,
+  .vp-info,
+  .vp-nav-preview,
+  .vp-speed-label,
+  .topbar-nav-btn
+),
+body.lang-ml :where(
+  .hero-title,
+  .results-title,
+  .hero-text,
+  .results-subtitle,
+  .summary-text,
+  .plain-note,
+  .section-title,
+  .hero-eyebrow,
+  .results-eyebrow,
+  .metric-card,
+  .metric-card strong,
+  .metric-card span,
+  .signal-card,
+  .signal-card strong,
+  .signal-card div,
+  .install-banner-title,
+  .install-banner-body,
+  .header-brand-line,
+  .header-brand-subtitle,
+  .tab-chip,
+  .btn-primary,
+  .btn-ghost,
+  .quick-action,
+  .question-row,
+  .pattern-row,
+  .term-row,
+  .doctor-callout,
+  .hospital-card,
+  .hospital-meta,
+  .dropzone-title,
+  .dropzone-meta,
+  .panel-title,
+  .panel-subtitle,
+  .vp-label,
+  .vp-info,
+  .vp-nav-preview,
+  .vp-speed-label,
+  .topbar-nav-btn
+) {
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+}
+
+body.lang-ta .hero-title,
+body.lang-ml .hero-title {
+  line-height: 1.14;
+}
+
+body.lang-ta .hero-title {
+  font-size: clamp(1.82rem, 4vw, 3.95rem);
+}
+
+body.lang-ml .hero-title {
+  font-size: clamp(1.8rem, 3.95vw, 3.85rem);
+}
+
+body.lang-ta .results-title {
+  font-size: clamp(2.02rem, 4.35vw, 4.25rem);
+}
+
+body.lang-ml .results-title {
+  font-size: clamp(1.98rem, 4.25vw, 4.15rem);
+}
+
+body.lang-ta :where(.badge, .confidence-note, .finding-value, .file-row-name),
+body.lang-ml :where(.badge, .confidence-note, .finding-value, .file-row-name) {
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+}
+
+body.lang-ta :where(.hospital-card, .signal-pill, .question-row, .question-row-action, .btn-primary, .btn-ghost, .quick-action, .install-banner-body, .install-banner-title, .hospital-meta, .section-title),
+body.lang-ml :where(.hospital-card, .signal-pill, .question-row, .question-row-action, .btn-primary, .btn-ghost, .quick-action, .install-banner-body, .install-banner-title, .hospital-meta, .section-title) {
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+}
+
+.hospital-pronunciation {
+  font-size: 0.84rem;
+  color: var(--text3);
+  font-weight: 500;
+  line-height: 1.35;
+}
