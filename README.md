@@ -21,6 +21,18 @@
 
 ---
 
+## 🔗 Live Demo and Downloads
+
+| Platform | Link |
+|---|---|
+| 🌐 Web App | [Open ReportEase](https://report-ease-flame.vercel.app) |
+| 🖥️ Windows Installer | [Download for Windows](https://github.com/S-KavyaSuresh/ReportEase/releases/download/v2.1.0/ReportEase.Setup.2.1.0.exe) |
+| 📱 Android APK | [Download for Android](https://github.com/S-KavyaSuresh/ReportEase/releases/download/v2.1.0/ReportEase-Android.apk) |
+
+> The Windows installer works on Windows 64-bit systems. The Android APK is for Android devices only.
+
+---
+
 ## 📌 What Is ReportEase?
 
 ReportEase is an AI-powered medical report explanation assistant that helps users understand medical reports in simple language.
