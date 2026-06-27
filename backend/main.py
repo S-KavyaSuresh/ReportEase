@@ -33,10 +33,16 @@ app = FastAPI(title="ReportEase API", version="2.1.0", docs_url=None, redoc_url=
 # Development: set ALLOWED_ORIGINS= (empty) → localhost only
 # Production:  ALLOWED_ORIGINS=https://your-app.vercel.app
 _raw_origins = os.getenv("ALLOWED_ORIGINS", "")
-ALLOWED_ORIGINS = (
-    [o.strip() for o in _raw_origins.split(",") if o.strip()]
-    if _raw_origins
-    else ["http://localhost:3000", "http://localhost:5173"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://report-ease-flame.vercel.app",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 logger.info(f"CORS allowed origins: {ALLOWED_ORIGINS}")
 
