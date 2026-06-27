@@ -7,7 +7,7 @@
  *   - /api/* routes   → Never cached
  *   - External URLs   → Never cached
  */
-const CACHE_VERSION = 'reportease-v2.1.5';
+const CACHE_VERSION = 'reportease-v2.1.6';
 
 const STATIC_PRECACHE = [
   '/icon-192.png',
@@ -72,8 +72,8 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // index.html and SPA navigation: network first, cache fallback
-  if (request.mode === 'navigate' || url.endsWith('/index.html')) {
+  // SPA navigation: fallback safely if network fails
+  if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
         .then((res) => {
@@ -85,25 +85,44 @@ self.addEventListener('fetch', (event) => {
           }
           return res;
         })
-        .catch(() => caches.match('/index.html') || caches.match(request))
+        .catch(async () => {
+          const cachedHome = await caches.match('/');
+          const cachedIndex = await caches.match('/index.html');
+          return (
+            cachedHome ||
+            cachedIndex ||
+            new Response('Offline', {
+              status: 503,
+              statusText: 'Offline',
+              headers: { 'Content-Type': 'text/plain' },
+            })
+          );
+        })
     );
     return;
   }
 
-  // Static assets: cache first
+  // Static assets: cache first, then network
   event.respondWith(
     caches.match(request).then((cached) => {
       if (cached) return cached;
 
-      return fetch(request).then((res) => {
-        if (res && res.status === 200 && res.type !== 'opaque') {
-          const clone = res.clone();
-          caches.open(CACHE_VERSION).then((cache) => {
-            cache.put(request, clone);
+      return fetch(request)
+        .then((res) => {
+          if (res && res.status === 200 && res.type !== 'opaque') {
+            const clone = res.clone();
+            caches.open(CACHE_VERSION).then((cache) => {
+              cache.put(request, clone);
+            });
+          }
+          return res;
+        })
+        .catch(() => {
+          return new Response('', {
+            status: 204,
+            statusText: 'No cached response available',
           });
-        }
-        return res;
-      });
+        });
     })
   );
 });
