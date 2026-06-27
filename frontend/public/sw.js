@@ -7,7 +7,7 @@
  *   - /api/* routes   → Never cached
  *   - External URLs   → Never cached
  */
-const CACHE_VERSION = 'reportease-v2.1.6';
+const CACHE_VERSION = 'reportease-v2.1.7';
 
 const STATIC_PRECACHE = [
   '/icon-192.png',
@@ -118,7 +118,7 @@ self.addEventListener('fetch', (event) => {
           return res;
         })
         .catch(() => {
-          return new Response('', {
+          return new Response(null, {
             status: 204,
             statusText: 'No cached response available',
           });
